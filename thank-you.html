@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Your call is booked | NB Realtor</title>
+    <meta name="description" content="Your private call with Nikhil Bora is confirmed. Here is what happens next." />
+    <!-- Thank-you pages should not be indexed or shared as a landing page -->
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Mulish:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #ffffff;
+            --ink: #1b1b1b;
+            --body: #2b2b2b;
+            --soft: #4b4b4b;
+            --mut: #777;
+            --faint: #9a9a9a;
+            --gold: #b8893c;
+            --gold2: #a2752e;
+            --gold-bg: #f8f1e4;
+            --gold-ln: #ead7b3;
+            --star: #e0a92e;
+            --line: #e8e8e8;
+            --line2: #f0f0f0;
+            --sans: 'Mulish', system-ui, -apple-system, Segoe UI, sans-serif;
+            --head: 'Poppins', var(--sans);
+        }
+
+        * { box-sizing: border-box }
+        html { scroll-behavior: smooth }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--body);
+            font-family: var(--sans);
+            font-size: 18px;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden
+        }
+
+        img { max-width: 100%; display: block }
+        a { color: var(--gold2) }
+
+        h1, h2, h3 {
+            font-family: var(--head);
+            color: var(--ink);
+            margin: 0;
+            line-height: 1.18;
+            letter-spacing: -.01em
+        }
+
+        b, strong { color: var(--ink); font-weight: 700 }
+        p { margin: 0 0 18px }
+
+        /* top bar */
+        .sale {
+            background: #161616;
+            color: #fff;
+            font-size: 13px
+        }
+
+        .sale .in {
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 9px 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            flex-wrap: wrap
+        }
+
+        .sale b {
+            color: #d7b062;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            font-size: 11px;
+            font-family: var(--head);
+            font-weight: 600
+        }
+
+        /* logo */
+        .lstrip { border-bottom: 1px solid var(--line) }
+        .lstrip .in { max-width: 1040px; margin: 0 auto; padding: 15px 20px; text-align: center }
+
+        .blogo {
+            font-family: var(--head);
+            font-weight: 700;
+            font-size: 20px;
+            letter-spacing: .16em;
+            color: var(--gold2)
+        }
+
+        .blogo b { color: var(--ink) }
+
+        .blogo small {
+            display: block;
+            font-size: 8px;
+            letter-spacing: .32em;
+            text-transform: uppercase;
+            color: var(--mut);
+            margin-top: 3px;
+            font-weight: 600
+        }
+
+        /* layout */
+        .page { max-width: 760px; margin: 0 auto; padding: 0 20px }
+
+        /* hero */
+        .hero { text-align: center; padding: 48px 0 8px }
+
+        .tick {
+            width: 76px;
+            height: 76px;
+            margin: 0 auto 22px;
+            border-radius: 50%;
+            background: var(--gold-bg);
+            border: 1px solid var(--gold-ln);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pop .5s cubic-bezier(.22, 1, .36, 1) both
+        }
+
+        .tick svg { width: 38px; height: 38px }
+
+        .tick path {
+            stroke: var(--gold2);
+            stroke-width: 3;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 40;
+            stroke-dashoffset: 40;
+            animation: draw .55s .3s ease-out forwards
+        }
+
+        @keyframes pop { from { transform: scale(.6); opacity: 0 } to { transform: scale(1); opacity: 1 } }
+        @keyframes draw { to { stroke-dashoffset: 0 } }
+
+        .eyebrow {
+            font-family: var(--head);
+            font-weight: 600;
+            font-size: 11px;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: var(--gold2)
+        }
+
+        h1.hl {
+            font-size: clamp(28px, 5.4vw, 42px);
+            font-weight: 800;
+            margin: 12px auto 0;
+            max-width: 640px
+        }
+
+        .sub {
+            font-size: 19px;
+            color: var(--soft);
+            margin: 16px auto 0;
+            max-width: 600px
+        }
+
+        /* note from Nikhil */
+        .note {
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 22px;
+            margin: 36px 0 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .05)
+        }
+
+        .note .pf {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex: none;
+            border: 3px solid #fff;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, .1)
+        }
+
+        .note p { font-size: 16.5px; color: var(--body); margin: 0 0 12px }
+        .note .sig { font-family: var(--head); font-weight: 600; font-size: 14.5px; color: var(--ink) }
+        .note .sig span { display: block; font-family: var(--sans); font-weight: 500; font-size: 12.5px; color: var(--mut) }
+
+        /* section heading */
+        .sh {
+            font-family: var(--head);
+            font-size: clamp(22px, 3.3vw, 28px);
+            font-weight: 700;
+            margin: 52px 0 12px
+        }
+
+        .lede { color: var(--soft); font-size: 17px }
+
+        /* steps */
+        .steps { margin: 18px 0 0; padding: 0; list-style: none }
+
+        .steps li {
+            display: grid;
+            grid-template-columns: 46px 1fr;
+            gap: 14px;
+            padding: 20px 0;
+            border-top: 1px solid var(--line)
+        }
+
+        .steps li:last-child { border-bottom: 1px solid var(--line) }
+
+        .steps .n {
+            font-family: var(--head);
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: .08em;
+            color: var(--gold2);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--gold-ln);
+            background: var(--gold-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .steps h3 { font-size: 18px; font-weight: 700; margin: 7px 0 6px }
+        .steps p { font-size: 16px; color: var(--soft); margin: 0 }
+
+        /* checklist */
+        .list { margin: 16px 0 0; padding: 0; list-style: none }
+
+        .list li {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            font-size: 16.5px;
+            color: var(--body);
+            padding: 10px 0
+        }
+
+        .list li span.c { color: var(--gold2); font-weight: 800; flex: none; margin-top: 1px }
+
+        /* dark band */
+        .band {
+            background: #161616;
+            color: #efe9df;
+            border-radius: 12px;
+            padding: 34px 28px;
+            margin: 52px 0 0;
+            text-align: center
+        }
+
+        .band h2 { color: #fff; font-weight: 700; font-size: clamp(22px, 3.6vw, 28px); margin: 0 0 12px }
+        .band p { color: rgba(239, 233, 223, .82); font-size: 16.5px; margin: 0 auto; max-width: 560px }
+
+        .badges { display: flex; justify-content: center; gap: 34px; margin-top: 24px; padding-top: 22px; border-top: 1px solid rgba(255, 255, 255, .1) }
+        .badges b { display: block; font-family: var(--head); font-size: 16px; color: #f0d9ad }
+        .badges span { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: rgba(239, 233, 223, .6) }
+
+        /* testimonial */
+        .rev { border: 1px solid var(--line); border-radius: 10px; padding: 22px; margin-top: 22px }
+        .stars { color: var(--star); letter-spacing: 2px; font-size: 14px }
+        .rev q { quotes: none; display: block; font-size: 17px; color: var(--ink); margin: 10px 0 14px }
+        .rev .rb { display: flex; align-items: center; gap: 10px }
+
+        .rev .av {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: #f3ead9; color: var(--gold2);
+            font-family: var(--head); font-weight: 700; font-size: 13px;
+            display: flex; align-items: center; justify-content: center; flex: none
+        }
+
+        .rev .rn { font-family: var(--head); font-weight: 600; font-size: 13.5px; color: var(--ink) }
+        .rev .rl { font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--mut) }
+
+        /* reschedule */
+        .resched {
+            margin: 40px 0 0;
+            padding: 18px 20px;
+            border-radius: 10px;
+            background: var(--gold-bg);
+            border: 1px solid var(--gold-ln);
+            font-size: 15px;
+            color: #6a4e1e;
+            line-height: 1.55
+        }
+
+        .resched b { color: #4f3914 }
+        .resched a { color: #4f3914 }
+
+        .back { display: inline-block; margin-top: 26px; font-size: 14.5px; color: var(--mut); text-decoration: none; border-bottom: 1px solid var(--line) }
+        .back:hover { color: var(--gold2); border-color: var(--gold-ln) }
+
+        /* footer */
+        footer { border-top: 1px solid var(--line); padding: 38px 0 50px; background: #fafafa; margin-top: 56px }
+        footer .in { max-width: 720px; margin: 0 auto; padding: 0 20px; text-align: center }
+        .flogo { font-family: var(--head); font-size: 22px; letter-spacing: .14em; color: var(--gold2); font-weight: 700 }
+        .flogo b { color: var(--ink) }
+        .flogo small { display: block; font-size: 8.5px; letter-spacing: .3em; text-transform: uppercase; color: var(--mut); margin-top: 5px; font-weight: 600 }
+        footer p { font-size: 13px; color: var(--mut); max-width: 600px; margin: 16px auto }
+        .disc { font-size: 11.5px; color: #a2a2a2; border-top: 1px solid var(--line); padding-top: 16px; margin-top: 20px; line-height: 1.6 }
+
+        @media (max-width: 680px) {
+            body { font-size: 17px }
+            .hero { padding-top: 36px }
+            .sub { font-size: 17px }
+            .note { flex-direction: column; align-items: center; text-align: center; padding: 20px 18px }
+            .band { padding: 28px 20px }
+            .badges { gap: 20px }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .tick, .tick path { animation: none; stroke-dashoffset: 0 }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sale">
+        <div class="in"><b>Booking confirmed</b><span>Your private call with Nikhil Bora is on the calendar.</span></div>
+    </div>
+    <div class="lstrip">
+        <div class="in">
+            <div class="blogo"><b>NB</b> REALTOR<small>Where trust meets address</small></div>
+        </div>
+    </div>
+
+    <main class="page">
+
+        <!-- HERO -->
+        <section class="hero">
+            <div class="tick" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M11 21l6 6 13-14" /></svg></div>
+            <div class="eyebrow">Your call is booked</div>
+            <h1 class="hl"><span id="greet">Thank you.</span> Nikhil will see you on the call.</h1>
+            <p class="sub">A confirmation and calendar invite are on their way to your inbox. Here is what happens next,
+                and two minutes of preparation that will make the call far more useful to you.</p>
+        </section>
+
+        <!-- NOTE FROM NIKHIL -->
+        <div class="note">
+            <img class="pf" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAcFBQYFBAcGBgYIBwcICxILCwoKCxYPEA0SGhYbGhkWGRgcICgiHB4mHhgZIzAkJiorLS4tGyIyNTEsNSgsLSz/2wBDAQcICAsJCxULCxUsHRkdLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCwsLCz/wgARCADAAMADASIAAhEBAxEB/8QAGwAAAgMBAQEAAAAAAAAAAAAAAQIAAwQFBgf/xAAZAQEAAwEBAAAAAAAAAAAAAAAAAQIDBAX/2gAMAwEAAhADEAAAAfPi0VmuGCFyVkkAYCLapXLAJHgoeFUeSqjhCBwdIqYkAwUNBA6kkdKuKa2vqPRieVNtNqUR1tFcYADqIHCNrRolY4EDwrFsFU+dibMvr7c9vKW7sFq6er5lpj1WGvQimOL0VbAVww2sDCGErjwEMM9dm/Lb3B48w6Ls+lqacnL2hW3zXovV28GgPNMqxYJVh0NjEwIshUHArAlfRz9jm6vL4Ozzpttz+08/W/ndmLp3zWa65pXDNucQyVIsrNziQJUygaFZKw2d/wA53uTt6fIFFde5zPG7JjvdHkbs9Ody+ryd+ZQZ08YMAiOhvghIZIwQKMAWJnz0XHOhntzrNZm+bXz89a9N1bfmEMmoIJWtimplMjBIQiSgIhIOinyu/f53Do9FT51L17nNq97Dnc/PT0c+6SUmSQCODQRJGAQaUUXjXmyprS73niPX5a+eFt/m+l55PQbN8GvfyPRy8S+t+rDXs5V0T1Jj0Y3ciUm6AhByyxym3qyiyB+ieT+h823L5PpsHL1ZBqmuPnvF+k851c5JF62uhle2eTGu3jplb0xBw0PM6XEvEsU9GYESHvPT4uhzbU49ixOKbPIWjxySzoxWLYRTWRVWAUqesKnm1bznf87rXZFmtTozdWH0qBufZ0trgnyT23z/AGzZSulLCqChBApBAuhP/8QAKhAAAgEDBAEDBAIDAAAAAAAAAQIDAAQRBRASEyEgMDEUIjJAI0EVM1D/2gAIAQEAAQUC9jH6GKxWKx/wDGwoQuw4n0n3ht2CErd8D9axImRl6g7NGyfoYrFEhRcTc3UmlxHXdS3fGobvsWSL28b4rFOeKyszPZ6J2Rz6Nim01qeyda6nFcnSre6Yg+T70meNhCsuop8MmaeDybXlTWWKezRlljNrcQsXj96b8NGj4g6lDEf8pE1Ldo1NdItC7RqJBGreZbb/AEe8/wCFsRHprxc64AG35sJpJFIEjGPtiOpebdBxj9vG6RiSobXlY3Nk60tq1abbdcGowfymCoLSRqvrdzEylD6D7VuvNrJ8WzoGDoqkSrGs/FwlupoL1C6/knK8D70D9c0bcJJbrFIDIGlcPZdjTdhgk78gOO8nJ9nPqSQqXJz9WzueNK+KS97a7eIjdj6j7cvhefNYRHbiSfylzmriIO7TcqVSg/Qxyq4ha1mTEisIMZhxc8UjtLdribUlEN5+haL9rIJ7Uh4GaUmuw0ecx020+mj1W5772Gbl7pYCmmr7pHeAQWNi38M0QNNAtCIVYaf11qF19Nb/ADQpJSKWQH2Xk40ZDWaNWbBbyKVWPUYJX80kHMiNYxaTFq1WfuvBWQNhSuRQYH1HwOWfRGC11DbKKmgEsfHxEoVWXkJZGsxsEXYUNuzFJIr+i4OIl/HfRY+d3iuP3NDiU+TjNaxLmbY/O2a5U70jcW3vDQ3Y4XRIeFpRPGjlqCVM628Ejl5KPgAY2zWaJ+0NR+30XbZcbt5q1Trt/gflRHgLWuXG/wAmjufnFfHol8v/AFtbL2XqDCk8iBX9u4jjuZTNOKbcnYfPpY4Vvz30leWo0o87a3c8IKJwBsTsTQ+N/wD/xAAkEQACAgEEAQQDAAAAAAAAAAAAAQIRIQMSIDAQEzEyQUBRYf/aAAgBAwEBPwH8FI2oarq9KQ4SRn7JdGkrZ9mRGotrro0FWWSWfYrBCLs1/l0aTuNCwRkr8a8sV0actrL3MW2xTa9yTt9Cy6JQ25R6h/WXnlZZp/sWYk6iSl4svlDBp6lYZN27JcE/EuL5vwvMuX//xAAkEQACAQMEAgIDAAAAAAAAAAAAAQIQESEDEjAxIEETMkBRYf/aAAgBAgEBPwH8Fs3MTvxfJEUosaQn64NV2QlgsO5B3V+DWIPBuyTaNH68GqrSudjhgZor3wTjuR0h9DjdYIqy4PVxS3YNh/DbjyUGxQSNX9DxIheRGNHBMcGqrNdTJOFyCsrEfCUU6Q7q6JX84UfVYLy//8QAMBAAAQMCBAUDAgYDAAAAAAAAAQACESExAxASQSAiMFFhMkBxE4EjM0JSkaFQcuH/2gAIAQEABj8C/wA3UKQ0q3tQ418Iu9Tnf0tM/KP6Qvw7eVDhHsqmFSwVLqTU9lO6m5QaajytTByn+vYTEqv8LXjGJ2XKc7ZaRCkdehgrwyvDZWRHayk+wc6FpqYVDncKhByb1yp7qqoVy1RG6/MU6kzE3KaPHXgvaz5TW3Kg6nA9lEFaiOYolu63CpMeVhYQGp5coIjrx2qmfCqoaJJUFy1ircrLDG9Vp7ddrliC0HI4mrT2R1v1VXr5HXC0m2T3xP02qTv7B3lTsi3mjaFzMcpAcF9N/wBjk8z6qexn+V9MbqIlRVVBha20cgN1pdff2Md1BstXnutpXKIPdUKDRum/te3/AJ7F+Nsyg+V3uqZibLW78x39Ix6cPlCh3VqqINFSU3CGwr8otPdWyo1fVxRXYdkXD1GjeDt0YF1fPDJ7wnYRMaTREHvlWy5R9907CJtZaR6cOmVT0pRPfgw2tuDKkipXluRpk7FHaOjS/RdiGwzk0YrQNhkMEWZf5z08WocAHDq/dXhdiH9IRc67jJ6FVqFuA8AHdNb4U8DcBv8As7OePxwffgwm+eFz3WAkp2IbuM5aR0yhwDwOEYIu+p+M5PR//8QAJhAAAwACAgIBBQEBAQEAAAAAAAERITEQQVFhcSCBkaGx4dHw8f/aAAgBAQABPyGEGuZ2MnBohCc54hCDROWGG/BIaJzCDRCcdk5aITh8wiGuJkaElxK4jrArCXwNVrYJxONuZw+XxOGM0ITJdwJBgYTDTZ/Jd+EKBpMT2tjc10vsO639kGMhBohOEhriDHwQvlIeA6CzDI3+/wBgm7Jt22MfLweh6Ssib0yKb+MeXgaJxBriczlODFdKeB3u3oR3G0Qj0wReGMzu2VahV3hWxk7QxrhDOxonE4aEuIK0qZ2zXk3fexVMIciNEJ2SYvJYjQmqbJTBL7iEIMg+Vw1jmFK0spnkJijr4JtaECg1oxoxjKyUemJBzoX71YyYGTA+UicPjM4ShId3n7klRx9oee00LvoLlY0wvVGXW/hiWFmh6wThCHofEFxCDGRaGEQ8XWjaKVcrW2Km78Y+xUlSk9vYtyX8RsL/AIGyV3lIY5+BBmrAJfA23FzCCD1wi5K4QeuGJx70+YMTx6GLkmJdAiQrLKYwO21IeSCxWAvJqfCfA70c+hvA0NfQuHw9jVHmC4qTGl7yLeUfjU79i0of4C9l6CIf2gMSbKh3xQ9Uc/I2r+l/Ttyx7GZVbebbM5fzFWWbRKZojNtoSkuvCZQ6OPJtCaTcoyuSyL19PQhPogmUvHQ7n6D85wyb/GtvYrBU9lkgeWfB3XkzDRQQURf25fLH9PfD4bH0bpPJty2o/wBC6HGm33FVSXkdNJUhn9Ek7Zs3xTFOmop8r/44nLGNHRLwvf0tpbcEPbynn/JQbVP2NCapu/BeWTHCA1dEReCJeP8A0Uq9/Rb/AGTLdpPz9LZPoXKvIZpZ7E6C/EvLIpPOy77nkJsx47sVV0olm/HZhYnP/psa3T835JWzA7Or2ezGhsXCKXhDbv5GVkNmx2p4Oxz9x61RE9aw+BdhGJhtjfjf3CwDSWhbn3H+e+Lz4CzGh8HtUd/GTJS8snt0Krdtw3OMmKP4nTQyfhP8CtE+jYCse0iTUye29GW63W9sSEMyv2IYYTFPLqMLgnX0fdmNgIeeJ6wwlQw+Qtvl/bfhDeIAtYnz9jy/z+kEjJU+WzsvHIoMU2x8wgvQJhGilEyJZ4oq18C5nn2z7hpPp8jNq4z2JDZyTOW8vhwMOXyEpxKjIm0rhM+A4NuOxXDtoLRdBtWDu2jGRBwyta/wQssQvjrXDQY/A+g0aM+7cdCHt7CwLx25v+CR6R8QI2bdju48w/jqHrg1fk2LCiGUZcDfiMQs45oPQ/5BPB1xReZjrUQ/oPK4pf8Agv8Af4WsRZmPkZeK5MQ+TLx8H//aAAwDAQACAAMAAAAQjGyrneiCD6rnP/bXSNQJlkGLvfTzXSfAAMyELrrH5R75A/8AHJwq5z/kRTHzJgyWbxrAaKC58z7caQRUIcc44qc/f7JfTCbyywZ6vVFGF7UNu/wqvAim6fAkZw7pc8xOPZtsmU3UsQPlDRvn8//EACARAQACAgMAAgMAAAAAAAAAAAEAESExEDBBIFFAcaH/2gAIAQMBAT8Q/BFLZdpi7dIesEzPHgnSA2dFOfUVcGXFHDLka6FsGGO4RZQbIjT+wOX66K9+Qe5ahuGZQT99GVlttEBoMRRRbnoFAiewZtqOWWz5JItgpggEeL2NVvAyBeVo5wXADC3hW/BDjTkKOFRfTFvKzXy//8QAIBEBAAICAgIDAQAAAAAAAAAAAQARITEQIDBBUWFxQP/aAAgBAgEBPxD+FRxKNkHwn4JViewiNMbbwW/3PYJW8RhxKt74OzGg3B2YYL0wxuUw4O37COEbNdQ4uZnwMTAMxmWb1BKBqPAtKM5YSabgUUiqJ2IubTMdxdGD8oV1DqMCwQjMlR0JKaBi+bmQN8DaEWK2VLlQh88XHg7YR0uaC59cXL4//8QAJhABAAMAAgICAgIDAQEAAAAAAQARITFBUWFxgRCRocGx4fDR8f/aAAgBAQABPxBoEdXCK2UG8wNXZa6cxJC3MQUwGP7RcUsp8QGmaahkdsaPEYs4gj3E2JTHGOcTsQXFSnHZwRs1Atjzk1ONyyZJSBUqHBKiFwEjcjSJ5ICNLSShiNGKShsnzxMesoVJU2INepcw2K+hY9X18xgLtWfpM4O2cR1ESGOJW7+BMyBERKfUFxOHahhU0yjcj0lZVQUcTR4gcczjAVqP0bcN1ectS3n1Fe2Usxf4D/2D7E7a5h2e5ZgAAeiPWfU+GmMfhjqHJyphY4jTJST3jXYrfcRRuN9yhff4BsJZwjQpgVhHhx55fg7im2FQXfmDQzhfgiQsqwNB8vqAWutCQnQYltLdh59wKcE9ntXl8e9hR333s/g/iVcpOJvfxI1VT2gdQMiaI6lVnc2jcIvLi0kGWq5bokVrV8HmOEcPOD3Dub0Gp4jAajycxQ3nxLiIPd1AdFThLw9QCUpwV+T188zmgrMr+PwoHM1cGcTYe5yLiV1HHMqyViswtGUJUaEGJagL5z+5ajSgYGf5ggHELteZevN6hSCvSS1C+FQU5VYcTEAVtLlAlpM9TtG5cywPiKuGofMIMSBdUylXOuJWlRVSrvEreLy49KOS00sq2oPrzCTK2gYRrPuYCre/ERBDhsc+qpgDUzp3Kcq/sQbkLQfwGhqOlsCMssSnEgU2NhkxBxcrFYnfzBToj6W2P6jJzYgxodGWi/uU/wCF1IZDeN9QCrvKlTB2q2/9ncOmMQ+LhUIUEOmo8hKBAMzQnOKVZGpDTdSrdmT1G/GE8EMJEuio0wlvsuDB/nIQ1JttvMeok+VtofVx/MJYwf8AbiDkJaVw8R56m7XKBL1xuXbOYRgVK83zKSoz20K36NjtMaMQ8SivEFca9ZDTINELnAv8A2pZIK11KvicPcBu9a8AP+oAQJSnTbGd+Ks5lPbOwrPK2ocQJMhjpeXUfGgviWSz3yS4+zOk4/3DCKqr4y/7iRLIYbLNQqhBLtqD+pyy9vzDnch+5WZAwnyVZTTTj/mDt/v8H+yPRdrNiEq3DxTGMtcRqscl8JKskStQ6AO/mWXbaXZG5VDkhYvFS403/BEuVE9s5lRb6iWTMXIFzD8CFk5qe4ChlqVkHcsZ8IX1XP1L2mG20OzKntHUuCUaVt8nETawFgh1xEOBlalle4bzLSHA9jiXsdnzO4kWTOsMquZ3AlKfMwqFmItuKMoKTonj4ef3FXbI4lWcq5z5PESUfkcBhBUGC7EFVuPH0jrvRXFx6ucPJ2hjAO4MhYRmIqJZeQrxElUTGMJhhxs9Eo09Z7ZUYg2rb+0+TSC3YANqZy94fMZNA8h+Ie7bea8fULk2gFdnanHfHxKaR7xevfwc/UpwLfCDZfmvsx53I+0MmLOWQ1a7ETxKSwEELuApG1XKV7jYR4ti+oAJDytQoga1wh18N+UhegDV5scWXuHlGXCUA20JvzcKmrrPMYKo55LXUpDLT7evl3+oR0V52pX+z+pYOub/AIPucS7Lj+LCqj94OVDPwtjG+JahHx3EOD5bC6Kd5GgPuav5wTFv958BMroOPtuOG3YgaSrklapdALV4PMx3zHj2f+VLmR9gz/A39Qdil7V1fMIQIIA/BqVI68C4/cbUwsipt4iHJOGuzHP4DDZCFt8DyysfQZNk5Ea6sYMo5L6Qg/tIOHg8XYDvZeevuFUNz7JsY4KumTZxp4j+2LZMVbQ+ej0fzGzcXroukPXErPtq4e/959SnFfcHpQaKa5I3KABb43qEZY6fwNOIYhrsrZxrFY65Wfo4/uXe9/gX2tw9P5QD/URVLNcC6y4gVcO+x/cEFnaWeaVWcV/9hpVD/wBU2JxJwK/Rp+o21KVOVeWYUfcxPdtWxcXNIFVBunCIzQ5T38R1RBaoOZPcutjrTSR9GxtfBHd3kaqjm9E1YWc7YgQZLVGWvIp9vM+QX99DAspnDx0RnjIooFXwQw+v8kN2RTjRjWNfpHj7nEFYkIAVdBqxu1HqYPAvxByBcpKVeE15uID4ItKI2TYSL1lHUa1nT/qoCFckuLyQ83J46Pghrqrywj9FfLo+2ie7bgJti+INwtcDy+I+y1Z7jkBfMUogoGnX1KU2xg3Ia+PTKKM6xiRKTlP1gHfBksrYtivqc7gA9rUNWgj9FRBwdEvWeGEFHRAAGwzpKh/67f1NCwVG3DqPl7YOy9UVxt05cJxjYZOFbAvE4CeYbDpEDfiPdb/uY/RcDVdwaRPExlFGetf1Cu4BFA6OEA8gPMBY4MIHHxQAWxdW0i+HX0KPqCg7jijfIdEAAUBVRUX+IaRa3kCxW4BGjsQLAwa5huk6Epv8T5WtzAsvTBw+IbvH7aj+4qNkq7smwKWgGsvPUOjWyeEw+4KviPqhQ0c769Q5MpEIWiqlyp3bUfCH6iqR/9k=" alt="Nikhil Bora" />
+            <div>
+                <p>Thank you for booking. I keep these calls to a small number each month so I can come to every one
+                    properly prepared. Before we speak I will look at what you have told me, pull the recent sales in
+                    the towers that fit, and note the stacks I would avoid.</p>
+                <p>You will leave the call knowing more than you did, whether or not we end up working together.</p>
+                <div class="sig">Nikhil Bora<span>Buyer-side advisor &#183; South Mumbai</span></div>
+            </div>
+        </div>
+
+        <!-- NEXT STEPS -->
+        <h2 class="sh">What happens next</h2>
+        <ol class="steps">
+            <li>
+                <span class="n">01</span>
+                <div>
+                    <h3>Check your inbox</h3>
+                    <p>Your confirmation and calendar invite come from TidyCal. Not there in ten minutes? Look in spam
+                        or Promotions, and mark it safe so the reminder reaches you on the day.</p>
+                </div>
+            </li>
+            <li>
+                <span class="n">02</span>
+                <div>
+                    <h3>Note what matters to you</h3>
+                    <p>The short list below covers what is worth having to hand. It means we spend the call on your
+                        options, not on background.</p>
+                </div>
+            </li>
+            <li>
+                <span class="n">03</span>
+                <div>
+                    <h3>We talk, honestly</h3>
+                    <p>An honest read of your options, flaws first. No pitch, no pressure, no twenty site visits. If one
+                        of the eight fits, we plan a visit to the right stack, not the one the brochure leads with.</p>
+                </div>
+            </li>
+        </ol>
+
+        <!-- PREP CHECKLIST -->
+        <h2 class="sh">Worth having to hand on the call</h2>
+        <ul class="list">
+            <li><span class="c">&#10003;</span><span>A budget range, including what you would stretch to. It stays
+                    confidential, and it never reaches a builder.</span></li>
+            <li><span class="c">&#10003;</span><span>Two or three areas you would genuinely live in, and the one you
+                    would not.</span></li>
+            <li><span class="c">&#10003;</span><span>Whether you need possession now, or can wait for a tower under
+                    construction.</span></li>
+            <li><span class="c">&#10003;</span><span>Any flat you are already looking at, with the price you were
+                    quoted. I will tell you what the brochure will not.</span></li>
+            <li><span class="c">&#10003;</span><span>Anyone else in the decision. They are welcome on the call, and it
+                    saves you repeating everything later.</span></li>
+        </ul>
+
+        <!-- REASSURANCE -->
+        <section class="band">
+            <h2>What this call is not.</h2>
+            <p>It is not a sales pitch. I am paid to protect your money, not to move inventory. If the honest answer is
+                to wait, or to buy something I do not advise on, that is what you will hear.</p>
+            <div class="badges">
+                <div><b>2014</b><span>Advising since</span></div>
+                <div><b>Buyer</b><span>Side only</span></div>
+                <div><b>SoBo</b><span>&amp; beyond</span></div>
+            </div>
+        </section>
+
+        <div class="rev">
+            <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <q>He told me what was wrong with three flats before what was right. No broker had ever done that. We closed
+                on the fourth and I trust the decision completely.</q>
+            <div class="rb"><img class="av" src="Karan Shah.jpeg" alt="" aria-hidden="true">
+                <div>
+                    <div class="rn">Karan Shah</div>
+                    <div class="rl">South Mumbai</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESCHEDULE -->
+        <div class="resched"><b>Need to move the time?</b> Use the reschedule link in your confirmation email, or
+            <a id="waResched" href="#" target="_blank" rel="noopener">message Nikhil on WhatsApp</a> and he will find
+            another slot.</div>
+
+        <a class="back" id="backLink" href="/">&#8592; Back to the article</a>
+    </main>
+
+    <footer>
+        <div class="in">
+            <div class="flogo"><b>NB</b> REALTOR<small>Where trust meets address</small></div>
+            <p>Buyer-side residential advisory for Mumbai's finest addresses. Honest counsel, a curated shortlist, and a
+                price negotiated on your side. Advising since 2014, across South Mumbai and beyond.</p>
+            <p class="disc">This is a marketing page. Project names, images and developers belong to their respective
+                owners and are shown to indicate residences NB Realtor advises on, not an offer or a claim of agency.
+                Prices, availability and plans are indicative and change without notice. Verify all figures
+                independently before any decision.</p>
+        </div>
+    </footer>
+
+    <script>
+        /* ============================================================
+           CONFIG. Fill these in before going live. Empty = switched off.
+           ============================================================ */
+        var CONFIG = {
+            WA_NUMBER: "919167243606",   // same number as the article page
+            ARTICLE_URL: "/",            // link for "Back to the article"
+            META_PIXEL_ID: "",           // e.g. "123456789012345" -> fires fbq('track','Schedule')
+            GA4_ID: "",                  // e.g. "G-XXXXXXX"       -> fires 'generate_lead'
+            GADS_SEND_TO: ""             // e.g. "AW-XXXXXXX/abcDEF" -> Google Ads conversion
+        };
+
+        (function () {
+            function $(id) { return document.getElementById(id); }
+            function waLink(text) { return "https://wa.me/" + CONFIG.WA_NUMBER + "?text=" + encodeURIComponent(text); }
+
+            /* ---- Personalise from URL (?name=Rohan or ?first_name=Rohan) ---- */
+            var qs = new URLSearchParams(location.search);
+            var name = (qs.get("name") || qs.get("first_name") || qs.get("invitee_name") || "").trim().slice(0, 60)
+                .split(/\s+/).map(function (w) { return w.charAt(0).toUpperCase() + w.slice(1); }).join(" ");
+            var first = name.split(" ")[0];
+            if (first) {
+                $("greet").textContent = "Thank you, " + first + ".";
+            }
+
+            $("waResched").href = waLink("Hi Nikhil, I booked a call with you" + (name ? " (" + name + ")" : "") + " and need to move the time. Could we find another slot?");
+            $("backLink").href = CONFIG.ARTICLE_URL;
+
+            /* ---- Conversion tracking: fires once per browser session ---- */
+            var fired = false;
+            try { fired = sessionStorage.getItem("nb_booked") === "1"; sessionStorage.setItem("nb_booked", "1"); } catch (e) { }
+            if (fired) return;
+
+            if (CONFIG.META_PIXEL_ID) {
+                !function (f, b, e, v, n, t, s) {
+                    if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) };
+                    if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0;
+                    t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s)
+                }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+                fbq('init', CONFIG.META_PIXEL_ID);
+                fbq('track', 'PageView');
+                fbq('track', 'Schedule');
+            }
+            if (CONFIG.GA4_ID || CONFIG.GADS_SEND_TO) {
+                var tagId = CONFIG.GA4_ID || CONFIG.GADS_SEND_TO.split("/")[0];
+                var s = document.createElement("script"); s.async = true;
+                s.src = "https://www.googletagmanager.com/gtag/js?id=" + tagId; document.head.appendChild(s);
+                window.dataLayer = window.dataLayer || [];
+                window.gtag = function () { dataLayer.push(arguments); };
+                gtag("js", new Date());
+                if (CONFIG.GA4_ID) { gtag("config", CONFIG.GA4_ID); gtag("event", "generate_lead", { method: "tidycal_booking" }); }
+                if (CONFIG.GADS_SEND_TO) { gtag("config", CONFIG.GADS_SEND_TO.split("/")[0]); gtag("event", "conversion", { send_to: CONFIG.GADS_SEND_TO }); }
+            }
+        })();
+    </script>
+</body>
+
+</html>
