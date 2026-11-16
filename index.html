@@ -1559,9 +1559,6 @@
                         <div id="tc-slot" hidden></div>
                         <!-- <a class="cta" href="https://tidycal.com/nbrealtorr/30-minute-meeting" target="_blank"
                             rel="noopener">Book your private call &#8594;</a> -->
-                        <span class="alt">Prefer WhatsApp? <a
-                                href="https://wa.me/919167243606?text=Hi%20Nikhil%2C%20I%27m%20interested%20in%20a%20home%20in%20Mumbai%20and%20would%20like%20to%20discuss%20my%20requirements."
-                                target="_blank" rel="noopener noreferrer">Message Nikhil &#8594;</a></span>
                     </div>
 
                     <div class="scar">
@@ -1708,14 +1705,21 @@
             }, { passive: true });
             // TidyCal calendar: same embed as before, now loaded only after the lead form is saved.
             var calendarShown = false;
-            function showCalendar(scroll) {
+            function showCalendar(scroll, lead) {
                 var slot = document.getElementById('tc-slot');
                 document.getElementById('nbr-lead').hidden = true;
                 document.getElementById('nbr-done').hidden = false;
                 slot.hidden = false;
                 if (!calendarShown && isReal()) {
                     calendarShown = true;
-                    slot.innerHTML = '<div class="tidycal-embed" data-path="' + TIDYCAL_PATH + '"></div>';
+                    // TidyCal's embed reads data-name and data-email and prefills its booking form with them.
+                    var holder = document.createElement('div');
+                    holder.className = 'tidycal-embed';
+                    holder.setAttribute('data-path', TIDYCAL_PATH);
+                    if (lead && lead.name) holder.setAttribute('data-name', lead.name);
+                    if (lead && lead.email) holder.setAttribute('data-email', lead.email);
+                    slot.innerHTML = '';
+                    slot.appendChild(holder);
                     var s = document.createElement('script'); s.src = 'https://asset-tidycal.b-cdn.net/js/embed.js'; s.async = true;
                     s.onerror = function () { console.error('TidyCal booking calendar failed to load.'); };
                     document.body.appendChild(s);
@@ -1790,18 +1794,25 @@
                     page: location.href,
                     honeypot: ''
                 }).then(function () {
-                    try { sessionStorage.setItem('nbrLeadDone', '1'); } catch (e) { }
+                    var lead = { name: name, email: email };
+                    try { sessionStorage.setItem('nbrLeadDone', '1'); sessionStorage.setItem('nbrLead', JSON.stringify(lead)); } catch (e) { }
                     if (typeof fbq === 'function') { try { fbq('track', 'Lead'); } catch (e) { } }
-                    showCalendar(true);
+                    showCalendar(true, lead);
                 }).catch(function (err) {
                     console.error(err);
-                    statusEl.textContent = 'We could not save your details. Please try again, or message Nikhil on WhatsApp below.';
+                    statusEl.textContent = 'We could not save your details. Please try again, or call Nikhil on +91 91672 43606.';
                 }).then(function () {
                     submitting = false; btn.disabled = false; btn.innerHTML = label;
                 });
             });
             // Already submitted in this browser tab: go straight to the calendar after a reload.
-            try { if (sessionStorage.getItem('nbrLeadDone') === '1') showCalendar(false); } catch (e) { }
+            try {
+                if (sessionStorage.getItem('nbrLeadDone') === '1') {
+                    var saved = null;
+                    try { saved = JSON.parse(sessionStorage.getItem('nbrLead') || 'null'); } catch (e) { }
+                    showCalendar(false, saved);
+                }
+            } catch (e) { }
         })();
     </script>
 </body>
