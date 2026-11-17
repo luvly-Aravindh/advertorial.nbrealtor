@@ -1365,6 +1365,49 @@
             text-align: center
         }
 
+        .nbr-lead .nbr-status.ok {
+            color: #3f8f52
+        }
+
+        /* OTP step: shown after the OTP is sent to the mobile number */
+        .nbr-lead .nbr-otp[hidden] {
+            display: none
+        }
+
+        .nbr-lead .nbr-otp input {
+            letter-spacing: .3em;
+            font-weight: 650
+        }
+
+        .nbr-lead .nbr-otp-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 8px
+        }
+
+        .nbr-lead .nbr-link {
+            width: auto;
+            margin: 0;
+            min-height: 0;
+            padding: 4px 0;
+            background: none;
+            color: #786033;
+            font-size: 13px;
+            font-weight: 650;
+            text-decoration: underline
+        }
+
+        .nbr-lead .nbr-link[disabled] {
+            cursor: default;
+            text-decoration: none
+        }
+
+        .nbr-lead input[readonly] {
+            background: #f3efe7;
+            color: #777064
+        }
+
         /* Honeypot: stays in the DOM for bots, hidden from people */
         .nbr-lead .nbr-trap {
             position: absolute !important;
@@ -1539,6 +1582,17 @@
                                                 maxlength="10" pattern="[6-9][0-9]{9}"
                                                 placeholder="10-digit mobile number"
                                                 title="Enter a valid 10-digit Indian mobile number" required></div>
+                                    </div>
+                                    <div class="nbr-otp" id="nbr-otp-row" hidden>
+                                        <label for="nbr-otp">Enter the OTP sent to <span id="nbr-otp-to"></span></label>
+                                        <input id="nbr-otp" name="otp" type="text" inputmode="numeric"
+                                            autocomplete="one-time-code" maxlength="8" placeholder="OTP">
+                                        <div class="nbr-otp-actions">
+                                            <button type="button" class="nbr-link" id="nbr-otp-resend">Resend
+                                                OTP</button>
+                                            <button type="button" class="nbr-link" id="nbr-otp-change">Change
+                                                number</button>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="nbr-trap" aria-hidden="true">
@@ -1766,10 +1820,141 @@
             }
             function nameOk(n) { return n.length >= 2 && /[A-Za-zÀ-ɏऀ-ॿ]{2,}/.test(n) && !/\d|https?:|www\./i.test(n); }
 
+            // MSG91 OTP widget, driven through its exposed methods so the OTP box uses this form's own UI.
+            // widgetId and tokenAuth are public by design. The MSG91 authkey must never be placed in this page.
+            var OTP_WIDGET_ID = "366b71664c34303730373630";
+            var OTP_TOKEN_AUTH = "590513TsKasHK3fKF6afbf972P1";
+            var OTP_SCRIPTS = ['https://verify.msg91.com/otp-provider.js', 'https://verify.phone91.com/otp-provider.js'];
+            var OTP_RESEND_SECONDS = 30;
+            var otpReady = null;
+            function otpUnavailable(message) { var e = new Error(message); e.otpUnavailable = true; return e; }
+            function loadOtp() {
+                if (otpReady) return otpReady;
+                otpReady = new Promise(function (resolve, reject) {
+                    var i = 0;
+                    function waitForMethods() {
+                        var started = Date.now();
+                        (function poll() {
+                            if (typeof window.sendOtp === 'function' && typeof window.verifyOtp === 'function') return resolve();
+                            if (Date.now() - started > 8000) return reject(otpUnavailable('MSG91 OTP methods were not exposed.'));
+                            setTimeout(poll, 150);
+                        })();
+                    }
+                    (function attempt() {
+                        var s = document.createElement('script'); s.src = OTP_SCRIPTS[i]; s.async = true;
+                        s.onload = function () {
+                            if (typeof window.initSendOTP !== 'function') return reject(otpUnavailable('MSG91 initSendOTP is missing.'));
+                            try {
+                                window.initSendOTP({
+                                    widgetId: OTP_WIDGET_ID,
+                                    tokenAuth: OTP_TOKEN_AUTH,
+                                    exposeMethods: true,
+                                    success: function () { },
+                                    failure: function () { }
+                                });
+                            } catch (e) { return reject(otpUnavailable('MSG91 initSendOTP failed.')); }
+                            waitForMethods();
+                        };
+                        s.onerror = function () {
+                            i++;
+                            if (i < OTP_SCRIPTS.length) attempt(); else reject(otpUnavailable('MSG91 OTP script failed to load.'));
+                        };
+                        document.head.appendChild(s);
+                    })();
+                });
+                otpReady.catch(function () { otpReady = null; });   // let the next attempt retry the load
+                return otpReady;
+            }
+            function otpCall(run) {
+                return new Promise(function (resolve, reject) {
+                    var timer = setTimeout(function () { reject(new Error('OTP request timed out.')); }, 20000);
+                    run(function (data) {
+                        clearTimeout(timer);
+                        if (data && data.type === 'error') reject(data); else resolve(data || {});
+                    }, function (err) { clearTimeout(timer); reject(err || new Error('OTP request failed.')); });
+                });
+            }
+            function otpSend(mobile) { return loadOtp().then(function () { return otpCall(function (ok, fail) { window.sendOtp('91' + mobile, ok, fail); }); }); }
+            function otpVerify(code) { return otpCall(function (ok, fail) { window.verifyOtp(code, ok, fail); }); }
+            function otpResend() { return otpCall(function (ok, fail) { window.retryOtp('11', ok, fail); }); }   // '11' = SMS channel
+
             var form = document.getElementById('nbr-lead-form');
             var statusEl = document.getElementById('nbr-lead-status');
             var btn = document.getElementById('nbr-lead-btn');
+            var otpRow = document.getElementById('nbr-otp-row');
+            var otpInput = document.getElementById('nbr-otp');
+            var otpTo = document.getElementById('nbr-otp-to');
+            var resendBtn = document.getElementById('nbr-otp-resend');
+            var changeBtn = document.getElementById('nbr-otp-change');
+            var defaultLabel = btn.innerHTML;
+            var otpStage = false, resendTimer = null;
+            var verified = { mobile: '', token: '' };   // number that passed OTP, kept so a failed lead save can be retried without a new OTP
             var formShownAt = Date.now();
+
+            function setStatus(msg, ok) { statusEl.textContent = msg || ''; statusEl.classList.toggle('ok', !!ok); }
+            function busy(text) { submitting = true; btn.disabled = true; btn.textContent = text; }
+            function idle() { submitting = false; btn.disabled = false; btn.innerHTML = otpStage ? 'Verify &amp; Continue &#8594;' : defaultLabel; }
+            function lockFields(lock) { ['full_name', 'email', 'mobile'].forEach(function (n) { form.elements[n].readOnly = lock; }); }
+            function startResendCooldown() {
+                var left = OTP_RESEND_SECONDS;
+                clearInterval(resendTimer);
+                resendBtn.disabled = true;
+                resendBtn.textContent = 'Resend OTP in ' + left + 's';
+                resendTimer = setInterval(function () {
+                    left--;
+                    if (left <= 0) { clearInterval(resendTimer); resendBtn.disabled = false; resendBtn.textContent = 'Resend OTP'; }
+                    else resendBtn.textContent = 'Resend OTP in ' + left + 's';
+                }, 1000);
+            }
+            function enterOtpStage(mobile) {
+                otpStage = true;
+                otpTo.textContent = '+91 ' + mobile;
+                otpInput.value = '';
+                otpRow.hidden = false;
+                lockFields(true);
+                startResendCooldown();
+                otpInput.focus();
+            }
+            function exitOtpStage() {
+                otpStage = false;
+                otpRow.hidden = true;
+                otpInput.value = '';
+                lockFields(false);
+                clearInterval(resendTimer);
+            }
+            function saveLead(fields, lead) {
+                busy('Saving your details…');
+                return submitLead(fields).then(function () {
+                    try { sessionStorage.setItem('nbrLeadDone', '1'); sessionStorage.setItem('nbrLead', JSON.stringify(lead)); } catch (e) { }
+                    if (typeof fbq === 'function') { try { fbq('track', 'Lead'); } catch (e) { } }
+                    showCalendar(true, lead);
+                }).catch(function (err) {
+                    console.error(err);
+                    setStatus('We could not save your details. Please try again, or call Nikhil on +91 91672 43606.');
+                }).then(idle);
+            }
+
+            // Start loading the OTP script as soon as the visitor touches the form, so it is ready by submit.
+            form.addEventListener('focusin', function () { loadOtp().catch(function () { }); }, { once: true });
+            otpInput.addEventListener('input', function () { this.value = this.value.replace(/\D/g, '').slice(0, 8); });
+            resendBtn.addEventListener('click', function () {
+                if (submitting || resendBtn.disabled) return;
+                setStatus('');
+                resendBtn.disabled = true;
+                otpResend().then(function () {
+                    setStatus('A new OTP has been sent.', true);
+                    startResendCooldown();
+                }).catch(function (err) {
+                    console.error(err);
+                    setStatus('We could not resend the OTP. Please try again in a moment.');
+                    resendBtn.disabled = false;
+                });
+            });
+            changeBtn.addEventListener('click', function () {
+                if (submitting) return;
+                exitOtpStage(); idle(); setStatus('');
+                form.elements.mobile.focus();
+            });
             form.elements.mobile.addEventListener('input', function () { this.value = this.value.replace(/\D/g, '').slice(0, 10); });
             form.addEventListener('submit', function (event) {
                 event.preventDefault();
@@ -1784,25 +1969,53 @@
                 if (!nameOk(name)) { statusEl.textContent = 'Please enter your full name.'; form.elements.full_name.focus(); return; }
                 if (!emailOk(email)) { statusEl.textContent = 'Please enter a valid email address.'; form.elements.email.focus(); return; }
                 if (!mobileOk(mobile)) { statusEl.textContent = 'Please enter a valid 10-digit mobile number.'; form.elements.mobile.focus(); return; }
-                submitting = true; btn.disabled = true;
-                var label = btn.innerHTML; btn.textContent = 'Saving your details…';
-                submitLead({
+                var lead = { name: name, email: email };
+                var fields = {
                     name: name,
                     email: email,
                     phone: '+91' + mobile,
                     source: 'Advertorial - Nikhil Bora',
                     page: location.href,
-                    honeypot: ''
-                }).then(function () {
-                    var lead = { name: name, email: email };
-                    try { sessionStorage.setItem('nbrLeadDone', '1'); sessionStorage.setItem('nbrLead', JSON.stringify(lead)); } catch (e) { }
-                    if (typeof fbq === 'function') { try { fbq('track', 'Lead'); } catch (e) { } }
-                    showCalendar(true, lead);
-                }).catch(function (err) {
+                    honeypot: '',
+                    otp_verified: true
+                };
+                // This number already passed OTP (only the lead save failed last time): save without a new OTP.
+                if (verified.mobile === mobile) {
+                    if (verified.token) fields.otp_token = verified.token;
+                    saveLead(fields, lead);
+                    return;
+                }
+                // Step 1: send the OTP and reveal the OTP box.
+                if (!otpStage) {
+                    busy('Sending OTP…');
+                    otpSend(mobile).then(function () {
+                        enterOtpStage(mobile);
+                        setStatus('OTP sent to +91 ' + mobile + '.', true);
+                        idle();
+                    }).catch(function (err) {
+                        console.error(err);
+                        // MSG91 could not be loaded at all (blocked or down): keep the lead, flagged as unverified.
+                        if (err && err.otpUnavailable) { fields.otp_verified = false; return saveLead(fields, lead); }
+                        setStatus('We could not send the OTP. Please check the number and try again.');
+                        idle();
+                    });
+                    return;
+                }
+                // Step 2: verify the OTP, then save the lead and show the calendar.
+                var code = otpInput.value.replace(/\D/g, '');
+                if (!/^\d{4,8}$/.test(code)) { setStatus('Please enter the OTP sent to your mobile.'); otpInput.focus(); return; }
+                busy('Verifying…');
+                otpVerify(code).then(function (data) {
+                    var token = typeof data.message === 'string' ? data.message : (data['access-token'] || data.accessToken || '');
+                    verified = { mobile: mobile, token: token };
+                    if (token) fields.otp_token = token;
+                    exitOtpStage();
+                    saveLead(fields, lead);
+                }, function (err) {
                     console.error(err);
-                    statusEl.textContent = 'We could not save your details. Please try again, or call Nikhil on +91 91672 43606.';
-                }).then(function () {
-                    submitting = false; btn.disabled = false; btn.innerHTML = label;
+                    setStatus('That OTP is incorrect or has expired. Please try again or resend it.');
+                    idle();
+                    otpInput.focus();
                 });
             });
             // Already submitted in this browser tab: go straight to the calendar after a reload.
