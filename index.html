@@ -1874,6 +1874,13 @@
                     }, function (err) { clearTimeout(timer); reject(err || new Error('OTP request failed.')); });
                 });
             }
+            // MSG91's hCaptcha can reject a genuine visitor (VPN, privacy browser); that is not a wrong number.
+            function isCaptchaError(err) { return !!err && /captcha/i.test(String(err.message || '')); }
+            function otpSendError(err) {
+                return isCaptchaError(err)
+                    ? 'We could not complete the security check. Please try again, or call Nikhil on +91 91672 43606.'
+                    : 'We could not send the OTP. Please check the number and try again.';
+            }
             function otpSend(mobile) { return loadOtp().then(function () { return otpCall(function (ok, fail) { window.sendOtp('91' + mobile, ok, fail); }); }); }
             function otpVerify(code) { return otpCall(function (ok, fail) { window.verifyOtp(code, ok, fail); }); }
             function otpResend() { return otpCall(function (ok, fail) { window.retryOtp('11', ok, fail); }); }   // '11' = SMS channel
@@ -1946,7 +1953,7 @@
                     startResendCooldown();
                 }).catch(function (err) {
                     console.error(err);
-                    setStatus('We could not resend the OTP. Please try again in a moment.');
+                    setStatus(isCaptchaError(err) ? otpSendError(err) : 'We could not resend the OTP. Please try again in a moment.');
                     resendBtn.disabled = false;
                 });
             });
@@ -1996,7 +2003,7 @@
                         console.error(err);
                         // MSG91 could not be loaded at all (blocked or down): keep the lead, flagged as unverified.
                         if (err && err.otpUnavailable) { fields.otp_verified = false; return saveLead(fields, lead); }
-                        setStatus('We could not send the OTP. Please check the number and try again.');
+                        setStatus(otpSendError(err));
                         idle();
                     });
                     return;
